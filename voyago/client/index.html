@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Voyago — Book Your Perfect Trip</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#">Voyago</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMain">
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="bus.html">Bus</a></li>
+          <li class="nav-item"><a class="nav-link" href="cab.html">Cab</a></li>
+          <li class="nav-item"><a class="nav-link" href="hotel.html">Hotel</a></li>
+          <li class="nav-item"><a class="nav-link" href="package.html">Packages</a></li>
+          <li class="nav-item"><a id="nav-login" class="nav-link" href="login.html">Login</a></li>
+          <li class="nav-item"><a id="nav-register" class="nav-link" href="register.html">Register</a></li>
+          <li class="nav-item"><a id="nav-dashboard" class="nav-link d-none" href="dashboard.html">Dashboard</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero d-flex align-items-center text-white">
+    <div class="container text-center">
+      <h1 class="display-5 fw-bold">Book Your Perfect Trip with Ease</h1>
+      <p class="lead mb-4">Discover buses, cabs, hotels and curated holiday packages — all in one place.</p>
+      <a class="btn btn-light btn-lg" href="package.html">Explore Packages</a>
+    </div>
+  </header>
+
+  <!-- Featured Offers -->
+  <section class="container my-5">
+    <h3 class="mb-4">Featured Destinations</h3>
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+          <img src="https://source.unsplash.com/800x600/?beach" class="card-img-top" alt="Beach">
+          <div class="card-body">
+            <h5 class="card-title">Sunset Beach Weekend</h5>
+            <p class="card-text">2 nights stay with guided tour. Starting from <strong>$199</strong>.</p>
+            <a href="package.html" class="btn btn-primary">View Package</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+          <img src="https://source.unsplash.com/800x600/?mountain" class="card-img-top" alt="Mountain">
+          <div class="card-body">
+            <h5 class="card-title">Mountain Retreat</h5>
+            <p class="card-text">Escape to the hills. Flexible dates and family-friendly prices.</p>
+            <a href="hotel.html" class="btn btn-primary">Find Hotels</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+          <img src="https://source.unsplash.com/800x600/?city,travel" class="card-img-top" alt="City">
+          <div class="card-body">
+            <h5 class="card-title">City Explorer</h5>
+            <p class="card-text">Day trips, city passes and bus tickets in one bundle.</p>
+            <a href="bus.html" class="btn btn-primary">Search Buses</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-light py-4 mt-auto">
+    <div class="container text-center">
+      <small>&copy; Voyago — Built with Bootstrap</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
