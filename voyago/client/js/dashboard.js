@@ -1,19 +1,12 @@
 document.addEventListener('DOMContentLoaded', async () => {
   if (!requireAuth()) return;
-  const user = getUser();
-  if (!user || !user.id && !user._id) {
+  const user = await currentUser();
+  if (!user) {
     showAlert('User not found', 'danger');
     return;
   }
-  const uid = user.id || user._id;
-  try {
-    const res = await fetch(`http://localhost:5000/api/bookings/user/${uid}`, {
-      headers: { Authorization: 'Bearer ' + getToken() }
-    });
-    const data = await res.json();
-    if (!res.ok) { showAlert(data.message || 'Could not load bookings', 'danger'); return; }
-    renderBookings(data.bookings || data || []);
-  } catch (err) { showAlert(err.message, 'danger'); }
+  const bookings = user.bookings || [];
+  renderBookings(bookings);
 });
 
 function renderBookings(list) {

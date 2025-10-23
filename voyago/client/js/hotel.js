@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     const city = document.getElementById('city').value.trim();
     try {
-      const res = await fetch(`http://localhost:5000/api/hotels?city=${encodeURIComponent(city)}`);
+      const res = await fetch(`/api/hotels?city=${encodeURIComponent(city)}`);
       const data = await res.json();
       if (!res.ok) { showAlert(data.message || 'Error', 'danger'); return; }
       renderHotels(Array.isArray(data) ? data : []);
@@ -22,7 +22,7 @@ function renderHotels(list) {
   c.innerHTML = list.map(h => `
     <div class="col-md-4">
       <div class="card h-100 shadow-sm">
-        <img src="https://source.unsplash.com/800x600/?hotel" class="card-img-top" alt="hotel">
+        <img src="https://source.unsplash.com/800x600/?hotel,${encodeURIComponent(h.city||'travel')}" class="card-img-top" alt="hotel">
         <div class="card-body d-flex flex-column">
           <h5 class="card-title">${h.name || 'Hotel'}</h5>
           <p class="mb-1">City: ${h.city || ''}</p>
@@ -38,11 +38,11 @@ function renderHotels(list) {
 async function onBookHotel(id) {
   const token = getToken();
   if (!token) { showAlert('Please login to book', 'warning'); window.location = '/login.html'; return; }
-  const checkIn = document.getElementById('checkin').value || prompt('Check-in (YYYY-MM-DD):');
-  const checkOut = document.getElementById('checkout').value || prompt('Check-out (YYYY-MM-DD):');
-  const guests = document.getElementById('guests').value || prompt('Guests:');
+  const checkIn = document.getElementById('checkin')?.value || prompt('Check-in (YYYY-MM-DD):');
+  const checkOut = document.getElementById('checkout')?.value || prompt('Check-out (YYYY-MM-DD):');
+  const guests = document.getElementById('guests')?.value || prompt('Guests:');
   try {
-    const res = await fetch(`http://localhost:5000/api/hotels/${id}/book`, {
+    const res = await fetch(`/api/hotels/${id}/book`, {
       method: 'POST',
       headers: { 'Content-Type':'application/json', 'Authorization':'Bearer ' + token },
       body: JSON.stringify({ hotelId: id, checkIn, checkOut, guests })

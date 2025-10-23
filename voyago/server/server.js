@@ -28,7 +28,7 @@ const MAX_TRIES = 10;
 
 function startServer(port, triesLeft = MAX_TRIES) {
   const server = app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+    console.log(`Server running http://localhost:${port}`);
   });
 
   server.on('error', (err) => {

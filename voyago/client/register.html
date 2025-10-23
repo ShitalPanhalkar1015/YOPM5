@@ -8,6 +8,32 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="d-flex flex-column min-vh-100">
+  <div class="bg-float" aria-hidden="true">
+    <span class="float s1"></span>
+    <span class="float s4"></span>
+  </div>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">Voyago</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMain">
+        <ul class="navbar-nav ms-auto align-items-lg-center">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a id="nav-login" class="nav-link" href="login.html">Login</a></li>
+          <li class="nav-item"><a id="nav-register" class="nav-link" href="register.html">Register</a></li>
+          <li class="nav-item"><a id="nav-dashboard" class="nav-link d-none" href="dashboard.html">Dashboard</a></li>
+          <li id="nav-user-placeholder" class="nav-item"></li>
+          <li class="nav-item ms-lg-2">
+            <button id="theme-toggle" class="btn btn-sm btn-outline-light">☀️</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
   <div class="container py-5">
     <div class="row justify-content-center">
       <div class="col-md-6">
@@ -41,26 +67,6 @@
 
   <script src="js/main.js"></script>
   <script src="js/auth.js"></script>
-  <script>
-  document.getElementById('registerForm').addEventListener('submit', async e=>{
-    e.preventDefault();
-    const res = await fetch('/api/auth/register', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        password: document.getElementById('password').value
-      })
-    });
-    const data = await res.json();
-    if (data.token) {
-      localStorage.setItem('voyago_token', data.token);
-      window.location = '/dashboard.html';
-    } else {
-      document.getElementById('msg').innerText = data.message || 'Error';
-    }
-  });
-  </script>
+  <script src="js/theme.js"></script>
 </body>
 </html>

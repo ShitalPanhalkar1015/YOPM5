@@ -1,5 +1,5 @@
 // Handles login and register pages
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = '/api';
 
 async function postJson(url, body) {
   try {

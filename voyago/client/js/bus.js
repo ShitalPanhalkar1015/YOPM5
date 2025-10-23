@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const date = document.getElementById('date').value;
     const q = new URLSearchParams({ from, to, date });
     try {
-      const res = await fetch(`http://localhost:5000/api/bus?${q.toString()}`);
+      const res = await fetch(`/api/buses?${q.toString()}`);
       const data = await res.json();
       if (!res.ok) { showAlert(data.message || 'No buses', 'warning'); return; }
       renderResults(Array.isArray(data) ? data : []);
@@ -45,12 +45,11 @@ function renderResults(list) {
 async function onBookBus(id) {
   const token = getToken();
   if (!token) { showAlert('Please login to book', 'warning'); window.location = '/login.html'; return; }
-  // Ask user for seat numbers (basic)
   const seatsStr = prompt('Enter seat numbers to book (comma separated): e.g. 1,2');
   if (!seatsStr) return;
   const seats = seatsStr.split(',').map(s => parseInt(s.trim())).filter(Boolean);
   try {
-    const res = await fetch(`http://localhost:5000/api/bus/${id}/book`, {
+    const res = await fetch(`/api/buses/${id}/book`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
       body: JSON.stringify({ seats })
