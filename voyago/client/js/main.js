@@ -164,7 +164,7 @@ function updateNav() {
     if (login) login.classList.remove('d-none');
     if (register) register.classList.remove('d-none');
     if (dash) dash.classList.add('d-none');
-    if (navUserHolder) navUserHolder.innerHTML = ''; // remove menu
+    if (navUserHolder) navUserHolder.innerHTML = '';
   }
 }
 

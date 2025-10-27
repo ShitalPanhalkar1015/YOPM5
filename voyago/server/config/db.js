@@ -5,11 +5,8 @@ dotenv.config();
 const connectDB = async () => {
   try {
     mongoose.set('strictQuery', false);
-    const uri = process.env.MONGO_URI || 'mongodb://localhost:27017/voyago_db';
-    const conn = await mongoose.connect(uri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
+    const uri = process.env.MONGO_URI || 'mongodb://localhost:27017/voyago';
+    const conn = await mongoose.connect(uri);
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (err) {
     console.error('MongoDB connection error:', err.message);
