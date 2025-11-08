@@ -1,25 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const html = document.documentElement;
   const themeToggle = document.getElementById('theme-toggle');
   const currentTheme = localStorage.getItem('theme') || 'light';
 
-  // Apply the saved theme on initial load
-  document.documentElement.setAttribute('data-theme', currentTheme);
-  if (themeToggle) {
-    themeToggle.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
-  }
+  // Apply theme with transition
+  const applyTheme = (theme) => {
+    html.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+    html.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+  };
 
-  // Add click listener to the toggle button
+  // Initial theme
+  applyTheme(currentTheme);
+
+  // Theme toggle with transition
   if (themeToggle) {
     themeToggle.addEventListener('click', () => {
-      // Get the current theme from the <html> element
-      let theme = document.documentElement.getAttribute('data-theme');
-
-      // Switch theme
-      theme = theme === 'dark' ? 'light' : 'dark';
-
-      document.documentElement.setAttribute('data-theme', theme);
-      localStorage.setItem('theme', theme);
-      themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+      const newTheme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      applyTheme(newTheme);
     });
   }
 });
