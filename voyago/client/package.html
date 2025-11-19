@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Packages - Voyago</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Alert Container -->
+    <div id="alert-container"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Voyago</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="bus.html">Bus</a></li>
+                    <li class="nav-item"><a class="nav-link" href="hotel.html">Hotel</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="package.html">Packages</a></li>
+                    <li class="nav-item" id="login-link"><a class="nav-link" href="login.html">Login</a></li>
+                    <li class="nav-item" id="register-link"><a class="nav-link" href="register.html">Register</a></li>
+                    <li class="nav-item d-none" id="dashboard-link"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                    <li class="nav-item d-none" id="logout-link"><a class="nav-link" href="#" id="logout-btn">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+        <section id="packages">
+            <h2 class="text-center mb-4">Our Travel Packages</h2>
+            <p class="text-center text-muted mb-5">Explore curated packages for the world's most breathtaking destinations.</p>
+            
+            <!-- Packages Container -->
+            <div id="packages-container" class="row">
+                <!-- Sample data will be loaded here by package.js -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center p-3 mt-auto">
+        <p>&copy; 2025 Voyago. All Rights Reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/package.js"></script>
+</body>
+</html>
