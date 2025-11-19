@@ -16,9 +16,9 @@ const hotels = [
 ];
 
 const packages = [
-    { destination: 'Kerala Backwaters', description: 'A serene trip through the backwaters of Alleppey.', price: 25000, image: 'https://images.pexels.com/photos/1586795/pexels-photo-1586795.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', duration: '5 Days / 4 Nights' },
-    { destination: 'Rajasthan Desert Tour', description: 'Explore the majestic forts and deserts of Rajasthan.', price: 30000, image: 'https://images.pexels.com/photos/3889928/pexels-photo-3889928.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', duration: '7 Days / 6 Nights' },
-    { destination: 'Himalayan Adventure', description: 'Trekking and adventure sports in the Himalayas.', price: 40000, image: 'https://images.pexels.com/photos/547114/pexels-photo-547114.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', duration: '10 Days / 9 Nights' },
+    { destination: 'Kerala Backwaters', description: 'A serene trip through the backwaters of Alleppey.', price: 25000, image: 'https://tse3.mm.bing.net/th/id/OIP.VEsQqc9x09LVd1b__c144AHaEs?rs=1&pid=ImgDetMain&o=7&rm=3', duration: '5 Days / 4 Nights' },
+    { destination: 'Rajasthan Desert Tour', description: 'Explore the majestic forts and deserts of Rajasthan.', price: 30000, image: 'https://tse2.mm.bing.net/th/id/OIP.GzHkjlimuCgMGy0qAsP4BwHaEK?rs=1&pid=ImgDetMain&o=7&rm=3', duration: '7 Days / 6 Nights' },
+    { destination: 'Himalayan Adventure', description: 'Trekking and adventure sports in the Himalayas.', price: 40000, image: 'https://tse2.mm.bing.net/th/id/OIP.bmnzQkI-sH5T3rRw6B1qdwHaEo?rs=1&pid=ImgDetMain&o=7&rm=3', duration: '10 Days / 9 Nights' },
 ];
 
 const seedDatabase = async () => {
