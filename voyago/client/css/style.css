@@ -1,91 +1,293 @@
-/* style.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* === VOYAGO MODERN UI - STYLE.CSS === */
+
+/*
+ * TABLE OF CONTENTS
+ * 1.  Design Tokens
+ * 2.  Base & Typography
+ * 3.  Layout & Helpers
+ * 4.  Components
+ *     - Buttons
+ *     - Navbar
+ *     - Footer
+ *     - Hero Section
+ *     - Search Section
+ *     - Cards (General, Feature, Testimonial, Booking)
+ *     - Forms
+ * 5.  Animations & Micro-interactions
+ */
+
+/* 1. DESIGN TOKENS
+ * ========================================================================== */
 :root {
-    --primary-color: #0d6efd; /* Bootstrap primary blue */
-    --secondary-color: #6f42c1; /* A nice purple */
-    --gradient-start: #0d6efd;
-    --gradient-end: #8f6ed5;
+  /* Primary Palette (Travel Blue Theme) */
+  --primary-100: #E8F1FF;
+  --primary-200: #C7DBFF;
+  --primary-300: #A4C4FF;
+  --primary-400: #5B97FF;
+  --primary-500: #2563EB;   /* MAIN BRAND BLUE */
+  --primary-600: #1E4FC2;
+  --primary-700: #173C96;
+  --primary-800: #102A6A;
+
+  /* Accent & Supporting Colors */
+  --accent-yellow: #FACC15;
+  --accent-green: #22C55E;
+  --accent-red: #EF4444;
+  --neutral-50: #F9FAFB;
+  --neutral-100: #F3F4F6;
+  --neutral-200: #E5E7EB;
+  --neutral-300: #D1D5DB;
+  --neutral-700: #374151;
+  --neutral-900: #111827;
+
+  /* Background & Surfaces */
+  --bg-main: #FFFFFF;
+  --bg-soft: #F5F7FF; /* A very light blue for section backgrounds */
+  --bg-card: #FFFFFF;
+
+  /* Text Colors */
+  --text-main: #111827;
+  --text-muted: #6B7280;
+  --text-inverse: #FFFFFF;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 18px;
+
+  /* Shadows */
+  --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.12);
+  
+  /* Transitions */
+  --transition-fast: all 0.2s ease-in-out;
 }
 
+/* 2. BASE & TYPOGRAPHY
+ * ========================================================================== */
 body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    font-family: 'Roboto', sans-serif;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-main {
-    flex: 1;
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
 }
 
-.navbar {
-    background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+.lead {
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--text-muted);
 }
 
-.navbar-brand {
-    font-weight: bold;
-    font-size: 1.5rem;
+/* 3. LAYOUT & HELPERS
+ * ========================================================================== */
+.section {
+  padding: 6rem 0;
+}
+.section-soft {
+  background-color: var(--bg-soft);
+  border-radius: var(--radius-lg);
+  padding: 4rem 0;
 }
 
-.hero-section {
-    background: url('https://images.pexels.com/photos/386009/pexels-photo-386009.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center;
-    background-size: cover;
-    color: white;
-    padding: 8rem 0;
-    text-align: center;
-    position: relative;
-}
+/* 4. COMPONENTS
+ * ========================================================================== */
 
-.hero-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-}
-
-.hero-section .container {
-    position: relative;
-    z-index: 1;
-}
-
-.card {
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    border: none;
-    border-radius: 0.5rem;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-}
-
+/* --- Buttons --- */
 .btn-primary {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-    transition: background-color 0.2s;
+  background-color: var(--primary-500);
+  border-color: var(--primary-500);
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  transition: var(--transition-fast);
 }
-
 .btn-primary:hover {
-    background-color: var(--secondary-color);
-    border-color: var(--secondary-color);
+  background-color: var(--primary-600);
+  border-color: var(--primary-600);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-soft);
 }
 
-.form-container {
-    max-width: 500px;
-    margin: auto;
-    padding: 2rem;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+/* --- Navbar --- */
+.main-navbar {
+  background-color: var(--bg-main);
+  box-shadow: var(--shadow-soft);
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+}
+.main-navbar .navbar-brand {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--primary-500);
+}
+.main-navbar .nav-link {
+  color: var(--text-muted);
+  font-weight: 500;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+.main-navbar .nav-link:hover,
+.main-navbar .nav-link.active {
+  color: var(--primary-500);
+}
+.main-navbar .nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0.5rem;
+  right: 0.5rem;
+  height: 3px;
+  background-color: var(--primary-500);
+  transform: scaleX(0);
+  transition: var(--transition-fast);
+}
+.main-navbar .nav-link:hover::after,
+.main-navbar .nav-link.active::after {
+  transform: scaleX(1);
 }
 
-#alert-container {
-    position: fixed;
-    top: 80px;
-    right: 20px;
-    z-index: 1050;
-    min-width: 300px;
+/* --- Footer --- */
+.main-footer {
+  background-color: var(--primary-500);
+  color: var(--text-inverse);
+}
+.main-footer a {
+  color: var(--primary-200);
+  text-decoration: none;
+  transition: var(--transition-fast);
+}
+.main-footer a:hover {
+  color: var(--bg-main);
+}
+.main-footer .social-icons a {
+  font-size: 1.5rem;
+  margin-right: 1rem;
+}
+
+/* --- Hero Section --- */
+.hero-section {
+  background-color: var(--bg-soft);
+  padding: 4rem 0;
+  overflow: hidden;
+}
+.hero-section .hero-text {
+  z-index: 2;
+}
+.hero-section .hero-illustration {
+  max-width: 100%;
+  height: auto;
+}
+
+/* --- Search Section --- */
+.search-section {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+  margin-top: -4rem; /* Pulls it up over the hero */
+  position: relative;
+  z-index: 10;
+}
+
+/* --- Cards --- */
+.voyago-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  transition: var(--transition-fast);
+  height: 100%;
+}
+.voyago-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--shadow-md);
+}
+.voyago-card .card-img-top {
+  border-top-left-radius: var(--radius-lg);
+  border-top-right-radius: var(--radius-lg);
+}
+.rating-badge {
+  background-color: var(--accent-yellow);
+  color: var(--text-main);
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+.package-card {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  color: var(--text-inverse);
+}
+.package-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.package-card:hover img {
+  transform: scale(1.05);
+}
+.package-card .card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  padding: 2rem;
+}
+
+/* --- Dashboard Booking Cards --- */
+.booking-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  box-shadow: var(--shadow-soft);
+}
+.booking-card .icon {
+  font-size: 2rem;
+  color: var(--primary-500);
+}
+.booking-card .status-badge {
+  background-color: var(--accent-green);
+  color: var(--text-inverse);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* --- Forms --- */
+.auth-card {
+  max-width: 450px;
+  width: 100%;
+  background-color: var(--bg-card);
+  padding: 3rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+.form-control {
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--neutral-300);
+}
+.form-control:focus {
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px var(--primary-200);
+}
+
+/* 5. ANIMATIONS & MICRO-INTERACTIONS
+ * ========================================================================== */
+[data-aos] {
+  transition-property: transform, opacity;
 }

@@ -90,6 +90,29 @@ document.addEventListener('DOMContentLoaded', () => {
             logout();
         });
     }
+
+    // Navbar active state highlight
+    const currentPath = window.location.pathname.split('/').pop();
+    const navLinks = document.querySelectorAll('.main-navbar .nav-link');
+    navLinks.forEach(link => {
+        const linkPath = link.getAttribute('href');
+        if (linkPath === currentPath) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
 });
 
 /**
