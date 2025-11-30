@@ -1,40 +1,31 @@
 // js/dashboard.js
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Protect the route: Check for user in localStorage.
     const user = JSON.parse(localStorage.getItem('user'));
-    if (!user) {
-        // If no user, redirect to login immediately.
+    
+    if (!user || !localStorage.getItem('token')) {
         window.location.href = 'login.html';
-        return; // Stop script execution
+        return;
     }
 
-    // Update the dashboard header with the user's name
-    const welcomeHeader = document.querySelector('#dashboard-header h1');
-    if (welcomeHeader) {
-        welcomeHeader.textContent = `Welcome, ${user.name}!`;
+    // Update welcome message
+    const header = document.getElementById('dashboard-header');
+    if (header) {
+        header.querySelector('h1').textContent = `Welcome back, ${user.name}!`;
     }
 
-    // 2. Fetch and display user bookings.
     fetchUserBookings(user._id);
 });
 
 /**
- * Fetches and renders the current user's bookings.
+ * Fetches the user's bookings from the API.
  * @param {string} userId - The ID of the logged-in user.
  */
 async function fetchUserBookings(userId) {
     const bookingsContainer = document.getElementById('bookings-container');
     
-    // 3. Show a loading indicator.
-    bookingsContainer.innerHTML = `
-        <div class="text-center mt-5">
-            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <p class="mt-2">Loading your bookings...</p>
-        </div>
-    `;
+    // Show loading state
+    bookingsContainer.innerHTML = `<div class="text-center mt-5 w-100"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2">Loading your bookings...</p></div>`;
 
     try {
         const bookings = await api(`/bookings/user/${userId}`);
@@ -42,97 +33,78 @@ async function fetchUserBookings(userId) {
     } catch (error) {
         console.error('Fetch bookings error:', error);
         showAlert(error.message, 'danger');
-        bookingsContainer.innerHTML = `<div class="alert alert-danger">Failed to load your bookings. Please try again later.</div>`;
+        bookingsContainer.innerHTML = `<div class="alert alert-danger w-100">Failed to load your bookings. Please try again later.</div>`;
     }
 }
 
 /**
- * Renders the user's bookings, grouped by type.
- * @param {Array} bookings - An array of booking objects from the API.
+ * Renders the user's bookings on the dashboard.
+ * @param {Array} bookings - An array of booking objects.
  */
 function renderBookings(bookings) {
     const bookingsContainer = document.getElementById('bookings-container');
-
-    // 4. Handle the case where there are no bookings.
+    
     if (bookings.length === 0) {
-        bookingsContainer.innerHTML = `
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title">No Bookings Found</h5>
-                    <p class="card-text">You haven't made any bookings yet. Start exploring to plan your next trip!</p>
-                    <a href="index.html" class="btn btn-primary">Start Exploring</a>
-                </div>
-            </div>
-        `;
+        bookingsContainer.innerHTML = '<div class="alert alert-info w-100">You have no bookings yet. Start exploring and book your next trip!</div>';
         return;
     }
 
-    // Group bookings by type ('Bus', 'Hotel', 'Package')
-    const groupedBookings = bookings.reduce((acc, booking) => {
-        const type = booking.type;
-        if (!acc[type]) {
-            acc[type] = [];
+    const bookingCards = bookings.map(booking => {
+        let icon = 'bi-calendar-check';
+        let title = 'Booking';
+        let detailsHtml = '';
+
+        if (booking.type === 'Bus') {
+            icon = 'bi-bus-front-fill';
+            title = `Bus Ticket: ${booking.details.from} to ${booking.details.to}`;
+            detailsHtml = `
+                <p class="text-muted mb-1"><i class="bi bi-calendar-event"></i> Date: ${new Date(booking.details.date).toLocaleDateString()}</p>
+                <p class="text-muted mb-1"><i class="bi bi-people"></i> Seats: ${booking.details.seatsBooked}</p>
+            `;
+        } else if (booking.type === 'Hotel') {
+            icon = 'bi-building-fill';
+            title = `Hotel Stay: ${booking.details.hotelName}`; // Assuming hotelName is stored in details
+            detailsHtml = `
+                <p class="text-muted mb-1"><i class="bi bi-calendar-check"></i> Check-in: ${new Date(booking.details.checkIn).toLocaleDateString()}</p>
+                <p class="text-muted mb-1"><i class="bi bi-calendar-x"></i> Check-out: ${new Date(booking.details.checkOut).toLocaleDateString()}</p>
+                <p class="text-muted mb-1"><i class="bi bi-people"></i> Guests: ${booking.details.guests}</p>
+            `;
+        } else if (booking.type === 'Package') {
+            icon = 'bi-globe-americas';
+            title = `Package: ${booking.details.destination}`;
+            detailsHtml = `
+                <p class="text-muted mb-1"><i class="bi bi-clock"></i> Duration: ${booking.details.duration}</p>
+            `;
         }
-        acc[type].push(booking);
-        return acc;
-    }, {});
 
-    let html = '';
-    for (const type in groupedBookings) {
-        html += `<h3 class="mb-3">${type} Bookings</h3>`;
-        html += '<div class="row">';
-        html += groupedBookings[type].map(booking => createBookingCard(booking)).join('');
-        html += '</div><hr class="my-4">';
-    }
+        const statusBadgeClass = booking.status === 'Confirmed' ? 'bg-success' : (booking.status === 'Pending' ? 'bg-warning' : 'bg-danger');
 
-    bookingsContainer.innerHTML = html;
-}
-
-/**
- * Creates a Bootstrap card for a single booking.
- * @param {object} booking - The booking object.
- * @returns {string} - The HTML string for the booking card.
- */
-function createBookingCard(booking) {
-    let detailsHtml = '';
-    // Customize card details based on booking type
-    switch (booking.type) {
-        case 'Bus':
-            detailsHtml = `
-                <h5 class="card-title">${booking.details.name}</h5>
-                <p class="card-text mb-1"><strong>Route:</strong> ${booking.details.from} to ${booking.details.to}</p>
-                <p class="card-text"><strong>Seats:</strong> ${booking.details.seatsBooked}</p>
-            `;
-            break;
-        case 'Hotel':
-            detailsHtml = `
-                <h5 class="card-title">${booking.details.name}</h5>
-                <p class="card-text mb-1"><strong>City:</strong> ${booking.details.city}</p>
-                <p class="card-text"><strong>Nights:</strong> ${booking.details.nights}</p>
-            `;
-            break;
-        case 'Package':
-            detailsHtml = `
-                <h5 class="card-title">${booking.details.destination}</h5>
-                <p class="card-text mb-1"><strong>Duration:</strong> ${booking.details.duration}</p>
-            `;
-            break;
-        default:
-            detailsHtml = `<h5 class="card-title">Unknown Booking</h5>`;
-    }
-
-    return `
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    ${detailsHtml}
-                    <hr>
-                    <p class="card-text text-muted mb-1"><strong>Booking Date:</strong> ${new Date(booking.bookingDate).toLocaleDateString()}</p>
-                    <p class="card-text"><strong>Total Paid:</strong> ₹${booking.totalAmount}</p>
-                    <span class="badge bg-success position-absolute top-0 end-0 m-2">${booking.status}</span>
+        return `
+            <div class="col" data-aos="fade-up">
+                <div class="voyago-card p-4 h-100">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="rounded-circle bg-primary-50 p-3 text-primary-600">
+                            <i class="bi ${icon} fs-4"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="fw-bold text-neutral-900 mb-0">${title}</h5>
+                                <span class="badge ${statusBadgeClass}">${booking.status}</span>
+                            </div>
+                            <div class="mb-3">
+                                ${detailsHtml}
+                                <p class="text-muted mb-0"><small>Booking ID: ${booking._id}</small></p>
+                            </div>
+                            <div class="border-top pt-3 d-flex justify-content-between align-items-center">
+                                <span class="text-muted small">Total Amount</span>
+                                <span class="fw-bold text-primary-600 fs-5">₹${booking.totalAmount.toLocaleString()}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    `;
-}
+        `;
+    }).join('');
 
+    bookingsContainer.innerHTML = bookingCards;
+}

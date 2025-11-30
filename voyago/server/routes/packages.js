@@ -9,6 +9,11 @@ const { protect } = require('../middleware/auth');
 // @access  Public
 router.get('/', getPackages);
 
+// @route   GET /api/packages/:id
+// @desc    Get a single package by ID
+// @access  Public
+router.get('/:id', require('../controllers/packageController').getPackageById);
+
 // @route   POST /api/packages/book
 // @desc    Book a travel package
 // @access  Private (requires token)

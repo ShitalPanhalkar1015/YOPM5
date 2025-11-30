@@ -1,0 +1,21 @@
+{
+  "name": "voyago",
+  "version": "1.0.0",
+  "description": "Modern travel booking platform with Express.js backend and vanilla JS frontend",
+  "main": "server/server.js",
+  "scripts": {
+    "server": "cd voyago/server && npm run dev",
+    "install-server": "cd voyago/server && npm install",
+    "dev": "cd voyago/server && npm run dev",
+    "start": "cd voyago/server && npm start"
+  },
+  "keywords": [
+    "travel",
+    "booking",
+    "express",
+    "mongodb",
+    "voyago"
+  ],
+  "author": "Voyago Team",
+  "license": "ISC"
+}

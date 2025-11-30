@@ -4,9 +4,13 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config/db');
 const { seedDatabase } = require('./utils/seed');
+const path = require('path');
 
-// Load environment variables from .env file
-dotenv.config();
+// Load environment variables from .env file (check root if not in server)
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+if (!process.env.MONGO_URI) {
+    dotenv.config(); // Fallback to default
+}
 
 // Initialize Express app
 const app = express();
@@ -22,16 +26,19 @@ app.use(express.json()); // To parse JSON bodies
 seedDatabase();
 
 // Define API Routes
-app.get('/', (req, res) => {
-    res.send('Voyago API is running...');
-});
-
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/bus', require('./routes/bus'));
 app.use('/api/hotels', require('./routes/hotels'));
 app.use('/api/packages', require('./routes/packages'));
 app.use('/api/bookings', require('./routes/bookings'));
 
+// Serve static files from the client directory
+app.use(express.static(path.join(__dirname, '../client')));
+
+// Handle SPA routing (redirect unknown routes to index.html)
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/index.html'));
+});
 
 // Start the server
 const PORT = process.env.PORT || 5000;

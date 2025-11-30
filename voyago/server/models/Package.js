@@ -21,6 +21,20 @@ const packageSchema = new mongoose.Schema({
     duration: { // e.g., "5 Days / 4 Nights"
         type: String,
         required: true,
+    },
+    featured: {
+        type: Boolean,
+        default: false,
+    },
+    rating: {
+        type: Number,
+        default: 0,
+        min: 0,
+        max: 5,
+    },
+    activities: {
+        type: [String],
+        default: [],
     }
 }, {
     timestamps: true,

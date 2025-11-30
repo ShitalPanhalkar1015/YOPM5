@@ -48,25 +48,56 @@
                 <h1 class="text-center fw-bold text-primary-800 mb-4" data-aos="fade-up">Find Your Perfect Stay</h1>
                 <p class="lead text-center text-muted mb-5" data-aos="fade-up" data-aos-delay="100">Search for hotels, compare prices, and book your ideal accommodation with ease.</p>
                 <!-- Search Form -->
-                <form id="hotel-search-form" class="search-section row g-3 align-items-end" data-aos="fade-up" data-aos-delay="200">
-                    <div class="col-md-4">
-                        <label for="city" class="form-label text-neutral-700">City</label>
-                        <input type="text" class="form-control" id="city" placeholder="e.g., Goa" required>
+                <form id="hotel-search-form" class="mt-3 search-section" data-aos="fade-up" data-aos-delay="200">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-4">
+                            <label for="city" class="form-label text-neutral-700">City</label>
+                            <input type="text" class="form-control" id="city" placeholder="e.g., Goa">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="check-in" class="form-label text-neutral-700">Check-In</label>
+                            <input type="date" class="form-control" id="check-in" required>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="check-out" class="form-label text-neutral-700">Check-Out</label>
+                            <input type="date" class="form-control" id="check-out" required>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="guests" class="form-label text-neutral-700">Guests</label>
+                            <input type="number" class="form-control" id="guests" min="1" value="1" required>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100 btn-lg">Search</button>
+                        </div>
                     </div>
-                    <div class="col-md-2">
-                        <label for="check-in" class="form-label text-neutral-700">Check-In</label>
-                        <input type="date" class="form-control" id="check-in" required>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="check-out" class="form-label text-neutral-700">Check-Out</label>
-                        <input type="date" class="form-control" id="check-out" required>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="guests" class="form-label text-neutral-700">Guests</label>
-                        <input type="number" class="form-control" id="guests" min="1" value="1" required>
-                    </div>
-                    <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary w-100 btn-lg">Search</button>
+                    
+                    <!-- Advanced Filters -->
+                    <div class="row g-3 mt-2">
+                        <div class="col-md-3">
+                            <label for="min-price" class="form-label text-neutral-700 small">Min Price</label>
+                            <input type="number" class="form-control form-control-sm" id="min-price" placeholder="0">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="max-price" class="form-label text-neutral-700 small">Max Price</label>
+                            <input type="number" class="form-control form-control-sm" id="max-price" placeholder="50000">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="rating" class="form-label text-neutral-700 small">Min Rating</label>
+                            <select class="form-select form-select-sm" id="rating">
+                                <option value="">Any</option>
+                                <option value="3">3+ Stars</option>
+                                <option value="4">4+ Stars</option>
+                                <option value="5">5 Stars</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end pb-1">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="featured">
+                                <label class="form-check-label text-neutral-700 small" for="featured">
+                                    Show Featured Only
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>

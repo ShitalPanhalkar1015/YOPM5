@@ -27,23 +27,59 @@ async function fetchPackages() {
  * Renders the travel packages on the page.
  * @param {Array} packages - An array of package objects.
  */
+/**
+ * Renders the travel packages on the page.
+ * @param {Array} packages - An array of package objects.
+ */
 function renderPackages(packages) {
     const packagesContainer = document.getElementById('packages-container');
     if (packages.length === 0) {
-        packagesContainer.innerHTML = '<div class="alert alert-info">No travel packages are available at the moment.</div>';
+        packagesContainer.innerHTML = '<div class="alert alert-info w-100">No travel packages are available at the moment.</div>';
         return;
     }
 
     const packageCards = packages.map(pkg => `
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <img src="${pkg.image || 'https://via.placeholder.com/400x250'}" class="card-img-top" alt="${pkg.destination}" style="height: 200px; object-fit: cover;">
+        <div class="col" data-aos="fade-up">
+            <div class="voyago-card h-100">
+                <div class="img-container">
+                    <img src="${pkg.image || 'https://via.placeholder.com/400x300'}" 
+                         class="card-img-top" 
+                         alt="${pkg.destination}" 
+                         style="height: 240px; object-fit: cover; width: 100%;">
+                </div>
                 <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">${pkg.destination}</h5>
-                    <p class="card-text">${pkg.description}</p>
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="card-title mb-0">${pkg.destination}</h5>
+                        ${pkg.rating ? `<span class="rating-badge"><i class="bi bi-star-fill"></i> ${pkg.rating}</span>` : ''}
+                    </div>
+                    
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="badge bg-primary-soft text-primary-700" style="background-color: var(--primary-100); color: var(--primary-700);">
+                            <i class="bi bi-clock me-1"></i>${pkg.duration}
+                        </span>
+                    </div>
+                    
+                    <p class="card-text text-muted small flex-grow-1 mb-3">
+                        ${pkg.description ? (pkg.description.length > 100 ? pkg.description.substring(0, 100) + '...' : pkg.description) : 'Discover amazing experiences and create unforgettable memories.'}
+                    </p>
+                    
+                    ${pkg.activities && pkg.activities.length > 0 ? `
+                        <div class="mb-3 d-flex flex-wrap gap-1">
+                            ${pkg.activities.slice(0, 3).map(act => `<span class="amenity-badge"><i class="bi bi-check-circle-fill me-1"></i>${act}</span>`).join('')}
+                            ${pkg.activities.length > 3 ? `<span class="amenity-badge">+${pkg.activities.length - 3} more</span>` : ''}
+                        </div>
+                    ` : ''}
+
                     <div class="mt-auto">
-                        <p class="text-primary fw-bold fs-5 mb-2">₹${pkg.price}</p>
-                        <button class="btn btn-primary w-100" id="book-btn-${pkg._id}" onclick="bookPackage('${pkg._id}')">Book Now</button>
+                        <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-top pt-3">
+                            <div>
+                                <div class="price-amount">₹${pkg.price.toLocaleString()}</div>
+                                <small class="text-muted">per person</small>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary w-100" id="book-btn-${pkg._id}" onclick="bookPackage('${pkg._id}')">
+                            <i class="bi bi-calendar-check me-2"></i>Book Now
+                        </button>
                     </div>
                 </div>
             </div>

@@ -53,27 +53,70 @@ function renderBusResults(buses) {
     }
 
     const busCards = buses.map(bus => `
-        <div class="col-md-12 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div>
-                        <h5 class="card-title">${bus.name}</h5>
-                        <p class="card-text mb-1">
-                            <strong>Departure:</strong> ${bus.departureTime} | 
-                            <strong>Arrival:</strong> ${bus.arrivalTime}
-                        </p>
-                        <p class="card-text text-muted">Seats Available: ${bus.seatsAvailable}</p>
+        <div class="col-md-12 mb-4" data-aos="fade-up">
+            <div class="voyago-card p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-5">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-bus-front fs-3 text-primary-500 me-3"></i>
+                            <div>
+                                <h5 class="card-title mb-1">${bus.name}</h5>
+                                <p class="text-muted small mb-0">
+                                    <i class="bi bi-geo-alt-fill text-primary-500"></i> ${bus.from} 
+                                    <i class="bi bi-arrow-right mx-2"></i> ${bus.to}
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="text-end">
-                        <h4 class="text-primary fw-bold">₹${bus.price}</h4>
-                        <button class="btn btn-primary" id="book-btn-${bus._id}" onclick="bookBus('${bus._id}', 1)">Book Now</button>
+                    <div class="col-md-3">
+                        <div class="d-flex gap-3 align-items-center">
+                            <div class="text-center">
+                                <p class="mb-0 fw-bold text-neutral-900 fs-5">${bus.departureTime}</p>
+                                <small class="text-muted"><i class="bi bi-clock me-1"></i>Departure</small>
+                            </div>
+                            <i class="bi bi-arrow-right-circle text-primary-500"></i>
+                            <div class="text-center">
+                                <p class="mb-0 fw-bold text-neutral-900 fs-5">${bus.arrivalTime}</p>
+                                <small class="text-muted"><i class="bi bi-clock me-1"></i>Arrival</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 text-center my-3 my-md-0">
+                        <span class="badge ${bus.seatsAvailable > 10 ? 'bg-success' : bus.seatsAvailable > 5 ? 'bg-warning' : 'bg-danger'} px-3 py-2">
+                            <i class="bi bi-person-check-fill me-1"></i>${bus.seatsAvailable} Seats
+                        </span>
+                    </div>
+                    <div class="col-md-2 text-end">
+                        <div class="price-amount mb-2">₹${bus.price}</div>
+                        <div class="d-flex align-items-center justify-content-end gap-2">
+                            <input type="number" id="seats-${bus._id}" class="form-control form-control-sm" style="width: 60px;" value="1" min="1" max="${bus.seatsAvailable}">
+                            <button class="btn btn-primary btn-sm" id="book-btn-${bus._id}" onclick="initiateBusBooking('${bus._id}')">
+                                <i class="bi bi-ticket-perforated me-1"></i>Book
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     `).join('');
 
-    resultsContainer.innerHTML = `<h3 class="mb-4">Available Buses</h3><div class="row">${busCards}</div>`;
+    resultsContainer.innerHTML = `<h3 class="mb-4 text-primary-800">Available Buses</h3><div class="row">${busCards}</div>`;
+}
+
+/**
+ * Initiates the bus booking process.
+ * @param {string} busId - The ID of the bus to book.
+ */
+async function initiateBusBooking(busId) {
+    const seatsInput = document.getElementById(`seats-${busId}`);
+    const seats = parseInt(seatsInput.value);
+
+    if (seats < 1) {
+        showAlert('Please select at least 1 seat.', 'warning');
+        return;
+    }
+
+    bookBus(busId, seats);
 }
 
 /**
