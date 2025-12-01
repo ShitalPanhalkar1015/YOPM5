@@ -11,7 +11,7 @@ const bookingSchema = new mongoose.Schema({
     type: {
         type: String,
         required: true,
-        enum: ['Bus', 'Hotel', 'Package'],
+        enum: ['Bus', 'Hotel', 'Package', 'Flight'],
     },
     // Reference to the specific item that was booked
     itemId: {

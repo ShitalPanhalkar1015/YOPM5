@@ -27,6 +27,38 @@ const getUserBookings = async (req, res) => {
     }
 };
 
+/**
+ * @desc    Cancel a booking
+ * @route   PUT /api/bookings/:id/cancel
+ * @access  Private
+ */
+const cancelBooking = async (req, res) => {
+    try {
+        const booking = await Booking.findById(req.params.id);
+
+        if (!booking) {
+            return res.status(404).json({ message: 'Booking not found' });
+        }
+
+        // Ensure the logged-in user owns the booking
+        if (booking.userId.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: 'Not authorized to cancel this booking' });
+        }
+
+        if (booking.status === 'Cancelled') {
+            return res.status(400).json({ message: 'Booking is already cancelled' });
+        }
+
+        booking.status = 'Cancelled';
+        await booking.save();
+
+        res.json(booking);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error while cancelling booking', error: error.message });
+    }
+};
+
 module.exports = {
     getUserBookings,
+    cancelBooking,
 };

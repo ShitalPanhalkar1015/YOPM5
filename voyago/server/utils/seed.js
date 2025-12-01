@@ -2,6 +2,7 @@
 const Bus = require('../models/Bus');
 const Hotel = require('../models/Hotel');
 const Package = require('../models/Package');
+const Flight = require('../models/Flight');
 
 const buses = [
     { name: 'VRL Travels', from: 'Mumbai', to: 'Delhi', date: new Date('2025-12-15'), departureTime: '08:00 AM', arrivalTime: '10:00 PM', price: 2500, seatsAvailable: 30 },
@@ -10,6 +11,15 @@ const buses = [
     { name: 'Orange Travels', from: 'Pune', to: 'Goa', date: new Date('2025-12-18'), departureTime: '07:00 AM', arrivalTime: '05:00 PM', price: 1500, seatsAvailable: 35 },
     { name: 'SRS Travels', from: 'Delhi', to: 'Jaipur', date: new Date('2025-12-19'), departureTime: '06:00 AM', arrivalTime: '11:00 AM', price: 900, seatsAvailable: 28 },
     { name: 'Parveen Travels', from: 'Hyderabad', to: 'Bangalore', date: new Date('2025-12-20'), departureTime: '11:00 PM', arrivalTime: '07:00 AM', price: 1100, seatsAvailable: 32 },
+];
+
+const flights = [
+    { airline: 'IndiGo', flightNumber: '6E-123', from: 'Mumbai', to: 'Delhi', date: new Date('2025-12-15'), departureTime: '06:00 AM', arrivalTime: '08:00 AM', duration: '2h 00m', price: 5000, seatsAvailable: 150 },
+    { airline: 'Air India', flightNumber: 'AI-456', from: 'Delhi', to: 'Bangalore', date: new Date('2025-12-16'), departureTime: '10:00 AM', arrivalTime: '12:30 PM', duration: '2h 30m', price: 6500, seatsAvailable: 120 },
+    { airline: 'Vistara', flightNumber: 'UK-789', from: 'Bangalore', to: 'Mumbai', date: new Date('2025-12-17'), departureTime: '05:00 PM', arrivalTime: '06:45 PM', duration: '1h 45m', price: 5500, seatsAvailable: 140 },
+    { airline: 'SpiceJet', flightNumber: 'SG-101', from: 'Chennai', to: 'Kolkata', date: new Date('2025-12-18'), departureTime: '07:00 AM', arrivalTime: '09:15 AM', duration: '2h 15m', price: 4800, seatsAvailable: 130 },
+    { airline: 'IndiGo', flightNumber: '6E-234', from: 'Hyderabad', to: 'Goa', date: new Date('2025-12-19'), departureTime: '02:00 PM', arrivalTime: '03:15 PM', duration: '1h 15m', price: 3500, seatsAvailable: 160 },
+    { airline: 'Air Asia', flightNumber: 'I5-567', from: 'Pune', to: 'Delhi', date: new Date('2025-12-20'), departureTime: '08:00 PM', arrivalTime: '10:15 PM', duration: '2h 15m', price: 4200, seatsAvailable: 145 },
 ];
 
 const hotels = [
@@ -156,6 +166,7 @@ const seedDatabase = async () => {
         await Bus.deleteMany({});
         await Hotel.deleteMany({});
         await Package.deleteMany({});
+        await Flight.deleteMany({});
         
         console.log('Cleared existing data.');
 
@@ -163,6 +174,7 @@ const seedDatabase = async () => {
         await Bus.insertMany(buses);
         await Hotel.insertMany(hotels);
         await Package.insertMany(packages);
+        await Flight.insertMany(flights);
 
         console.log('Database seeded successfully!');
     } catch (error) {

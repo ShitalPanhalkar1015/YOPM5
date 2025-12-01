@@ -30,6 +30,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/bus', require('./routes/bus'));
 app.use('/api/hotels', require('./routes/hotels'));
 app.use('/api/packages', require('./routes/packages'));
+app.use('/api/flights', require('./routes/flights'));
 app.use('/api/bookings', require('./routes/bookings'));
 
 // Serve static files from the client directory

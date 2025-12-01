@@ -69,6 +69,14 @@ function renderBookings(bookings) {
                 <p class="text-muted mb-1"><i class="bi bi-calendar-x"></i> Check-out: ${new Date(booking.details.checkOut).toLocaleDateString()}</p>
                 <p class="text-muted mb-1"><i class="bi bi-people"></i> Guests: ${booking.details.guests}</p>
             `;
+        } else if (booking.type === 'Flight') {
+            icon = 'bi-airplane-engines';
+            title = `Flight: ${booking.details.from} to ${booking.details.to}`;
+            detailsHtml = `
+                <p class="text-muted mb-1"><i class="bi bi-calendar-event"></i> Date: ${new Date(booking.details.date).toLocaleDateString()}</p>
+                <p class="text-muted mb-1"><i class="bi bi-airplane"></i> Airline: ${booking.details.airline} (${booking.details.flightNumber})</p>
+                <p class="text-muted mb-1"><i class="bi bi-people"></i> Seats: ${booking.details.seatsBooked}</p>
+            `;
         } else if (booking.type === 'Package') {
             icon = 'bi-globe-americas';
             title = `Package: ${booking.details.destination}`;
@@ -78,6 +86,16 @@ function renderBookings(bookings) {
         }
 
         const statusBadgeClass = booking.status === 'Confirmed' ? 'bg-success' : (booking.status === 'Pending' ? 'bg-warning' : 'bg-danger');
+        
+        // Add Cancel Button if status is not Cancelled
+        let actionButtons = '';
+        if (booking.status !== 'Cancelled') {
+            actionButtons = `
+                <button class="btn btn-outline-danger btn-sm mt-3 cancel-booking-btn" data-id="${booking._id}">
+                    Cancel Booking
+                </button>
+            `;
+        }
 
         return `
             <div class="col" data-aos="fade-up">
@@ -96,8 +114,11 @@ function renderBookings(bookings) {
                                 <p class="text-muted mb-0"><small>Booking ID: ${booking._id}</small></p>
                             </div>
                             <div class="border-top pt-3 d-flex justify-content-between align-items-center">
-                                <span class="text-muted small">Total Amount</span>
-                                <span class="fw-bold text-primary-600 fs-5">₹${booking.totalAmount.toLocaleString()}</span>
+                                <div>
+                                    <span class="text-muted small d-block">Total Amount</span>
+                                    <span class="fw-bold text-primary-600 fs-5">₹${booking.totalAmount.toLocaleString()}</span>
+                                </div>
+                                ${actionButtons}
                             </div>
                         </div>
                     </div>
@@ -107,4 +128,34 @@ function renderBookings(bookings) {
     }).join('');
 
     bookingsContainer.innerHTML = bookingCards;
+
+    // Attach event listeners to cancel buttons
+    document.querySelectorAll('.cancel-booking-btn').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const bookingId = e.target.getAttribute('data-id');
+            handleCancelBooking(bookingId);
+        });
+    });
+}
+
+/**
+ * Handles the cancellation of a booking.
+ * @param {string} bookingId - The ID of the booking to cancel.
+ */
+async function handleCancelBooking(bookingId) {
+    if (!confirm('Are you sure you want to cancel this booking? This action cannot be undone.')) {
+        return;
+    }
+
+    try {
+        await api(`/bookings/${bookingId}/cancel`, 'PUT');
+        showAlert('Booking cancelled successfully.', 'success');
+        
+        // Refresh the bookings list
+        const user = JSON.parse(localStorage.getItem('user'));
+        fetchUserBookings(user._id);
+    } catch (error) {
+        console.error('Cancel booking error:', error);
+        showAlert(error.message, 'danger');
+    }
 }
