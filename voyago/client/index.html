@@ -47,14 +47,136 @@
         <!-- Hero Section -->
         <header class="hero-section d-flex align-items-center text-white text-center py-5">
             <div class="container">
-                <div class="row align-items-center">
+                <div class="row align-items-center mb-5">
                     <div class="col-lg-6 text-lg-start" data-aos="fade-right">
                         <h1 class="display-4 fw-bold mb-3" style="color: rgb(80, 15, 200);">Your Journey, Our Passion.</h1>
-                        <p class="lead mb-5">Book flights, hotels, and packages all in one place. Your dream vacation is just a few clicks away with Voyago.</p>
-                        <a href="package.html" class="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow-sm">Book Your Trip Now</a>
+                        <p class="lead mb-4" style="color: #4b5563;">Book flights, hotels, and packages all in one place. Your dream vacation is just a few clicks away with Voyago.</p>
                     </div>
                     <div class="col-lg-6 d-none d-lg-flex justify-content-center" data-aos="fade-left">
                         <img src="https://img.freepik.com/premium-photo/traveling-couple-with-luggage-standing-together-airport-waiting-departure-back-view_899263-10131.jpg" alt="Woman traveling with luggage" class="hero-illustration img-fluid">
+                    </div>
+                </div>
+
+                <!-- Tabbed Search Widget -->
+                <div class="search-widget-container bg-white p-4 rounded-4 shadow-lg" data-aos="fade-up" style="margin-top: -3rem; position: relative; z-index: 10;">
+                    <ul class="nav nav-pills mb-3 justify-content-center gap-2" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active d-flex align-items-center gap-2" id="pills-flight-tab" data-bs-toggle="pill" data-bs-target="#pills-flight" type="button" role="tab" aria-controls="pills-flight" aria-selected="true">
+                                <i class="bi bi-airplane-engines"></i> Flights
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link d-flex align-items-center gap-2" id="pills-hotel-tab" data-bs-toggle="pill" data-bs-target="#pills-hotel" type="button" role="tab" aria-controls="pills-hotel" aria-selected="false">
+                                <i class="bi bi-building"></i> Hotels
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link d-flex align-items-center gap-2" id="pills-bus-tab" data-bs-toggle="pill" data-bs-target="#pills-bus" type="button" role="tab" aria-controls="pills-bus" aria-selected="false">
+                                <i class="bi bi-bus-front"></i> Bus
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link d-flex align-items-center gap-2" id="pills-package-tab" data-bs-toggle="pill" data-bs-target="#pills-package" type="button" role="tab" aria-controls="pills-package" aria-selected="false">
+                                <i class="bi bi-globe-americas"></i> Packages
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <!-- Flight Search -->
+                        <div class="tab-pane fade show active" id="pills-flight" role="tabpanel" aria-labelledby="pills-flight-tab">
+                            <form class="row g-3 align-items-end" onsubmit="event.preventDefault(); window.location.href='flight.html';">
+                                <div class="col-md-3 text-start">
+                                    <label class="form-label text-muted small fw-bold">From</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-geo-alt text-primary"></i></span>
+                                        <input type="text" class="form-control bg-light border-start-0" placeholder="City or Airport">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 text-start">
+                                    <label class="form-label text-muted small fw-bold">To</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-geo-alt-fill text-primary"></i></span>
+                                        <input type="text" class="form-control bg-light border-start-0" placeholder="City or Airport">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 text-start">
+                                    <label class="form-label text-muted small fw-bold">Departure</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-calendar-event text-primary"></i></span>
+                                        <input type="date" class="form-control bg-light border-start-0">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">Search Flights</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Hotel Search -->
+                        <div class="tab-pane fade" id="pills-hotel" role="tabpanel" aria-labelledby="pills-hotel-tab">
+                            <form class="row g-3 align-items-end" onsubmit="event.preventDefault(); window.location.href='hotel.html';">
+                                <div class="col-md-4 text-start">
+                                    <label class="form-label text-muted small fw-bold">Destination</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-geo-alt text-primary"></i></span>
+                                        <input type="text" class="form-control bg-light border-start-0" placeholder="Where are you going?">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 text-start">
+                                    <label class="form-label text-muted small fw-bold">Check-in</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-calendar-check text-primary"></i></span>
+                                        <input type="date" class="form-control bg-light border-start-0">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 text-start">
+                                    <label class="form-label text-muted small fw-bold">Check-out</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-calendar-x text-primary"></i></span>
+                                        <input type="date" class="form-control bg-light border-start-0">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">Search</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Bus Search -->
+                        <div class="tab-pane fade" id="pills-bus" role="tabpanel" aria-labelledby="pills-bus-tab">
+                            <form class="row g-3 align-items-end" onsubmit="event.preventDefault(); window.location.href='bus.html';">
+                                <div class="col-md-4 text-start">
+                                    <label class="form-label text-muted small fw-bold">From</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-geo-alt text-primary"></i></span>
+                                        <input type="text" class="form-control bg-light border-start-0" placeholder="Departure City">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-start">
+                                    <label class="form-label text-muted small fw-bold">To</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-geo-alt-fill text-primary"></i></span>
+                                        <input type="text" class="form-control bg-light border-start-0" placeholder="Arrival City">
+                                    </div>
+                                </div>
+                                <div class="col-md-2 text-start">
+                                    <label class="form-label text-muted small fw-bold">Date</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-calendar-event text-primary"></i></span>
+                                        <input type="date" class="form-control bg-light border-start-0">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">Search Bus</button>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Package Search -->
+                        <div class="tab-pane fade" id="pills-package" role="tabpanel" aria-labelledby="pills-package-tab">
+                             <div class="text-center py-4">
+                                <h5 class="fw-bold text-neutral-900 mb-3">Explore Our Curated Holiday Packages</h5>
+                                <p class="text-muted mb-4">Find the perfect vacation package for your next adventure.</p>
+                                <a href="package.html" class="btn btn-primary px-5 py-2 fw-bold">View All Packages</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
