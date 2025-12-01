@@ -5,7 +5,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (flightSearchForm) {
         flightSearchForm.addEventListener('submit', handleFlightSearch);
     }
+    // Load all flights initially
+    loadAllFlights();
 });
+
+async function loadAllFlights() {
+    const resultsContainer = document.getElementById('flight-results');
+    resultsContainer.innerHTML = `<div class="text-center mt-5"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2">Loading available flights...</p></div>`;
+
+    try {
+        const flights = await api('/flights');
+        renderFlightResults(flights);
+    } catch (error) {
+        console.error('Load flights error:', error);
+        resultsContainer.innerHTML = `<div class="alert alert-danger">Failed to load flights. Please try again later.</div>`;
+    }
+}
 
 /**
  * Handles the flight search form submission.
