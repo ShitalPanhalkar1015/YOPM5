@@ -286,9 +286,6 @@ The application comes with pre-seeded data (automatically loaded on first run):
 
 - **Dashboard** (`dashboard.html`) - User profile and booking management
 
-## �📄 License
-
-ISC
 
 ## 👥 Contributing
 
