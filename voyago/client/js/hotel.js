@@ -8,7 +8,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (hotelSearchForm) {
         hotelSearchForm.addEventListener('submit', handleHotelSearch);
     }
+
+    // Payment button handler
+    const confirmPaymentBtn = document.getElementById('confirm-payment-btn');
+    if (confirmPaymentBtn) {
+        confirmPaymentBtn.addEventListener('click', handlePaymentSubmission);
+    }
 });
+
+let pendingBooking = null;
 
 /**
  * Loads all hotels from the backend and renders them.
@@ -156,29 +164,110 @@ async function initiateBooking(hotelId) {
     // Retrieve search criteria or prompt user
     let criteria = JSON.parse(sessionStorage.getItem('hotelSearchCriteria'));
     
-    if (!criteria || !criteria.checkIn || !criteria.checkOut) {
-        // If no search criteria, we could prompt via a modal, but for now let's default or alert
-        // For a better UX, scrolling to the search form would be good, but let's just alert
-        const checkInInput = document.getElementById('check-in');
-        const checkOutInput = document.getElementById('check-out');
+    // Pre-fill modal fields if criteria exist, otherwise leave empty for user to fill
+    const modalCheckIn = document.getElementById('modal-check-in');
+    const modalCheckOut = document.getElementById('modal-check-out');
+    const modalGuests = document.getElementById('modal-guests');
+
+    if (criteria && criteria.checkIn && criteria.checkOut) {
+        modalCheckIn.value = criteria.checkIn;
+        modalCheckOut.value = criteria.checkOut;
+        modalGuests.value = criteria.guests || 1;
+        // Optional: Make them read-only if we want to force search, but user asked to "add date", so editable is better.
+    } else {
+        // Try to get from search form if present
+        const searchCheckIn = document.getElementById('check-in').value;
+        const searchCheckOut = document.getElementById('check-out').value;
+        const searchGuests = document.getElementById('guests').value;
         
-        if (checkInInput && checkOutInput && checkInInput.value && checkOutInput.value) {
-             criteria = {
-                 checkIn: checkInInput.value,
-                 checkOut: checkOutInput.value,
-                 guests: document.getElementById('guests').value || 1
-             };
-        } else {
-            showAlert('Please select Check-In and Check-Out dates in the search form above.', 'info');
-            document.getElementById('hotel-search-form').scrollIntoView({ behavior: 'smooth' });
-            return;
-        }
+        if (searchCheckIn) modalCheckIn.value = searchCheckIn;
+        if (searchCheckOut) modalCheckOut.value = searchCheckOut;
+        if (searchGuests) modalGuests.value = searchGuests;
     }
 
+    // Store booking details (criteria might be incomplete, will be updated in handlePaymentSubmission)
+    pendingBooking = { 
+        hotelId, 
+        criteria: criteria || {} 
+    };
+
+    // Show payment modal
+    const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+    paymentModal.show();
+}
+
+/**
+ * Handles the payment submission.
+ */
+async function handlePaymentSubmission() {
+    if (!pendingBooking) return;
+
+    const payBtn = document.getElementById('confirm-payment-btn');
+    const originalText = payBtn.innerHTML;
+    
+    // Basic validation
+    const checkIn = document.getElementById('modal-check-in').value;
+    const checkOut = document.getElementById('modal-check-out').value;
+    const guests = document.getElementById('modal-guests').value;
+    
+    const cardHolder = document.getElementById('card-holder').value;
+    const cardNumber = document.getElementById('card-number').value;
+    const expiry = document.getElementById('expiry-date').value;
+    const cvv = document.getElementById('cvv').value;
+
+    if (!checkIn || !checkOut || !guests) {
+        alert('Please fill in check-in, check-out dates and guests.');
+        return;
+    }
+
+    if (!cardHolder || !cardNumber || !expiry || !cvv) {
+        alert('Please fill in all payment details.');
+        return;
+    }
+    
+    // Update pending booking criteria with modal values
+    pendingBooking.criteria = {
+        checkIn,
+        checkOut,
+        guests
+    };
+
+    payBtn.disabled = true;
+    payBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
+
+    // Simulate payment delay
+    setTimeout(async () => {
+        // Hide modal
+        const paymentModalEl = document.getElementById('paymentModal');
+        const paymentModal = bootstrap.Modal.getInstance(paymentModalEl);
+        paymentModal.hide();
+
+        // Reset button
+        payBtn.disabled = false;
+        payBtn.innerHTML = originalText;
+
+        // Proceed with booking
+        await bookHotel(pendingBooking.hotelId, pendingBooking.criteria);
+        
+        // Clear pending booking
+        pendingBooking = null;
+        
+        // Reset form
+        document.getElementById('payment-form').reset();
+    }, 2000);
+}
+
+/**
+ * Performs the actual hotel booking API call.
+ */
+async function bookHotel(hotelId, criteria) {
     const bookButton = document.getElementById(`book-btn-${hotelId}`);
-    const originalText = bookButton.innerHTML;
-    bookButton.disabled = true;
-    bookButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Booking...';
+    const originalText = bookButton ? bookButton.innerHTML : 'Book Now';
+    
+    if (bookButton) {
+        bookButton.disabled = true;
+        bookButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Booking...';
+    }
 
     try {
         const payload = {
@@ -201,8 +290,10 @@ async function initiateBooking(hotelId) {
         console.error('Booking error:', error);
         showAlert(error.message, 'danger');
     } finally {
-        bookButton.disabled = false;
-        bookButton.innerHTML = originalText;
+        if (bookButton) {
+            bookButton.disabled = false;
+            bookButton.innerHTML = originalText;
+        }
     }
 }
 

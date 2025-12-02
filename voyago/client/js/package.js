@@ -2,7 +2,15 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchPackages();
+
+    // Payment button handler
+    const confirmPaymentBtn = document.getElementById('confirm-payment-btn');
+    if (confirmPaymentBtn) {
+        confirmPaymentBtn.addEventListener('click', handlePaymentSubmission);
+    }
 });
+
+let pendingBooking = null;
 
 /**
  * Fetches travel packages from the API and renders them.
@@ -77,7 +85,7 @@ function renderPackages(packages) {
                                 <small class="text-muted">per person</small>
                             </div>
                         </div>
-                        <button class="btn btn-primary w-100" id="book-btn-${pkg._id}" onclick="bookPackage('${pkg._id}')">
+                        <button class="btn btn-primary w-100" id="book-btn-${pkg._id}" onclick="initiatePackageBooking('${pkg._id}')">
                             <i class="bi bi-calendar-check me-2"></i>Book Now
                         </button>
                     </div>
@@ -93,7 +101,11 @@ function renderPackages(packages) {
  * Handles the booking of a travel package.
  * @param {string} packageId - The ID of the package to book.
  */
-async function bookPackage(packageId) {
+/**
+ * Initiates the package booking process.
+ * @param {string} packageId - The ID of the package to book.
+ */
+async function initiatePackageBooking(packageId) {
     if (!localStorage.getItem('token')) {
         showAlert('You must be logged in to book a package.', 'warning');
         setTimeout(() => {
@@ -101,20 +113,99 @@ async function bookPackage(packageId) {
         }, 2000);
         return;
     }
+
+    // Store booking details
+    pendingBooking = { packageId };
+
+    // Show payment modal
+    const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+    paymentModal.show();
+}
+
+/**
+ * Handles the payment submission.
+ */
+async function handlePaymentSubmission() {
+    if (!pendingBooking) return;
+
+    const payBtn = document.getElementById('confirm-payment-btn');
+    const originalText = payBtn.innerHTML;
     
+    // Basic validation
+    const travelDate = document.getElementById('travel-date').value;
+    const travelers = document.getElementById('travelers').value;
+    const cardHolder = document.getElementById('card-holder').value;
+    const cardNumber = document.getElementById('card-number').value;
+    const expiry = document.getElementById('expiry-date').value;
+    const cvv = document.getElementById('cvv').value;
+
+    if (!travelDate || !travelers) {
+        alert('Please select travel date and number of travelers.');
+        return;
+    }
+
+    if (!cardHolder || !cardNumber || !expiry || !cvv) {
+        alert('Please fill in all payment details.');
+        return;
+    }
+
+    // Update pending booking with user inputs
+    pendingBooking.date = travelDate;
+    pendingBooking.travelers = travelers;
+
+    payBtn.disabled = true;
+    payBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
+
+    // Simulate payment delay
+    setTimeout(async () => {
+        // Hide modal
+        const paymentModalEl = document.getElementById('paymentModal');
+        const paymentModal = bootstrap.Modal.getInstance(paymentModalEl);
+        paymentModal.hide();
+
+        // Reset button
+        payBtn.disabled = false;
+        payBtn.innerHTML = originalText;
+
+        // Proceed with booking
+        await processPackageBooking(pendingBooking.packageId);
+        
+        // Clear pending booking
+        pendingBooking = null;
+        
+        // Reset form
+        document.getElementById('payment-form').reset();
+    }, 2000);
+}
+
+/**
+ * Processes the actual package booking API call.
+ * @param {string} packageId - The ID of the package to book.
+ */
+async function processPackageBooking(packageId) {
     const bookButton = document.getElementById(`book-btn-${packageId}`);
-    bookButton.disabled = true;
-    bookButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Booking...';
+    if (bookButton) {
+        bookButton.disabled = true;
+        bookButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Booking...';
+    }
 
     try {
-        const result = await api('/packages/book', 'POST', { packageId });
+        // Include date and travelers in the payload
+        const payload = { 
+            packageId,
+            date: pendingBooking.date,
+            travelers: pendingBooking.travelers
+        };
+        const result = await api('/packages/book', 'POST', payload);
         showAlert('Package booked successfully!', 'success');
         console.log('Booking successful:', result);
     } catch (error) {
         console.error('Booking error:', error);
         showAlert(error.message, 'danger');
     } finally {
-        bookButton.disabled = false;
-        bookButton.innerHTML = 'Book Now';
+        if (bookButton) {
+            bookButton.disabled = false;
+            bookButton.innerHTML = 'Book Now';
+        }
     }
 }

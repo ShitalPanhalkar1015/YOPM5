@@ -1,34 +1,39 @@
 # 🌍 Voyago - Modern Travel Booking Platform
 
-A full-stack travel booking application built with **Express.js**, **MongoDB**, and **Vanilla JavaScript**. Book buses, hotels, and travel packages all in one place!
+A full-stack travel booking application built with **Express.js**, **MongoDB**, and **Vanilla JavaScript**. Book buses, flights, hotels, and travel packages all in one place!
 
 ## ✨ Features
 
 ### Backend (Express.js + MongoDB)
 
-- ✅ **User Authentication** - JWT-based secure authentication
-- ✅ **Bus Booking System** - Search and book bus tickets
-- ✅ **Hotel Reservations** - Browse and book hotels with filters
-- ✅ **Travel Packages** - Pre-designed tour packages
-- ✅ **Booking Management** - Track all your bookings
-- ✅ **RESTful API** - Clean and well-documented API endpoints
-- ✅ **Database Seeding** - Auto-populate with sample data
+- ✅ **User Authentication** - JWT-based secure authentication with bcrypt password hashing
+- ✅ **Bus Booking System** - Search and book bus tickets with real-time availability
+- ✅ **Flight Booking System** - Search and book flights with multiple airlines
+- ✅ **Hotel Reservations** - Browse and book hotels with advanced filters
+- ✅ **Travel Packages** - Pre-designed tour packages for popular destinations
+- ✅ **Booking Management** - Comprehensive booking tracking and history
+- ✅ **RESTful API** - Clean, well-documented API endpoints
+- ✅ **Database Seeding** - Auto-populate with sample data on first run
+- ✅ **CORS Enabled** - Secure cross-origin resource sharing
 
 ### Frontend (Vanilla JS + Bootstrap 5)
 
-- ✅ **Modern UI/UX** - Clean, responsive design with smooth animations
-- ✅ **User Dashboard** - Manage bookings and profile
-- ✅ **Real-time Search** - Dynamic search for buses and hotels
-- ✅ **Authentication Flow** - Login/Register with form validation
-- ✅ **Mobile Responsive** - Works seamlessly on all devices
+- ✅ **Modern UI/UX** - Premium design with glassmorphism and smooth animations
+- ✅ **User Dashboard** - Manage all bookings and profile in one place
+- ✅ **Real-time Search** - Dynamic search for buses, flights, and hotels
+- ✅ **Authentication Flow** - Secure login/register with form validation
+- ✅ **Mobile Responsive** - Fully responsive design for all devices
+- ✅ **Interactive Cards** - Rich, detailed cards with hover effects and micro-animations
+- ✅ **Journey Timeline** - Visual timeline for bus and flight journeys
+- ✅ **Filter System** - Advanced filtering for hotels and packages
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
-- MongoDB (running locally or MongoDB Atlas)
-- npm or yarn
+- **Node.js** (v14 or higher)
+- **MongoDB** (running locally or MongoDB Atlas)
+- **npm** or **yarn**
 
 ### Installation
 
@@ -48,13 +53,15 @@ A full-stack travel booking application built with **Express.js**, **MongoDB**, 
 
 3. **Set up environment variables**
 
-   Create a `.env` file in the root directory (`YOPM5/`) with:
+   Create a `.env` file in the **root directory** (`YOPM5/`) with:
 
    ```env
    PORT=5000
    MONGO_URI=mongodb://localhost:27017/voyago
-   JWT_SECRET=your-secret-key-here
+   JWT_SECRET=your-secret-key-here-change-in-production
    ```
+
+   > **Note:** The server looks for `.env` two levels up from the server directory.
 
 4. **Start MongoDB**
 
@@ -75,7 +82,23 @@ A full-stack travel booking application built with **Express.js**, **MongoDB**, 
    npm run dev
    ```
 
-6. **Access the application**
+   Or use the convenience script from the root:
+
+   ```bash
+   # From the voyago directory
+   npm run dev
+   ```
+
+6. **Seed the database (optional)**
+
+   The database will be automatically seeded on first run. To manually seed:
+
+   ```bash
+   # From the server directory
+   npm run seed
+   ```
+
+7. **Access the application**
 
    Open your browser and navigate to:
 
@@ -87,53 +110,60 @@ A full-stack travel booking application built with **Express.js**, **MongoDB**, 
 
 ```
 voyago/
-├── client/                 # Frontend files
+├── client/                    # Frontend files (served statically)
 │   ├── css/
-│   │   └── style.css      # Custom styles
+│   │   └── style.css         # Custom styles with modern design
 │   ├── js/
-│   │   ├── main.js        # Global utilities & API wrapper
-│   │   ├── auth.js        # Authentication logic
-│   │   ├── bus.js         # Bus booking logic
-│   │   ├── hotel.js       # Hotel booking logic
-│   │   ├── package.js     # Package booking logic
-│   │   └── dashboard.js   # Dashboard logic
-│   ├── index.html         # Homepage
-│   ├── login.html         # Login page
-│   ├── register.html      # Registration page
-│   ├── bus.html           # Bus search & booking
-│   ├── hotel.html         # Hotel search & booking
-│   ├── package.html       # Travel packages
-│   └── dashboard.html     # User dashboard
+│   │   ├── main.js           # Global utilities & API wrapper
+│   │   ├── auth.js           # Authentication logic
+│   │   ├── home.js           # Homepage dynamic content
+│   │   ├── bus.js            # Bus search & booking logic
+│   │   ├── flight.js         # Flight search & booking logic
+│   │   ├── hotel.js          # Hotel search & booking logic
+│   │   ├── package.js        # Package browsing & booking logic
+│   │   └── dashboard.js      # User dashboard logic
+│   ├── index.html            # Homepage with hero section
+│   ├── login.html            # Login page
+│   ├── register.html         # Registration page
+│   ├── bus.html              # Bus search & booking page
+│   ├── flight.html           # Flight search & booking page
+│   ├── hotel.html            # Hotel search & booking page
+│   ├── package.html          # Travel packages page
+│   └── dashboard.html        # User dashboard
 │
-├── server/                # Backend files
+├── server/                    # Backend files
 │   ├── config/
-│   │   └── db.js         # MongoDB connection
+│   │   └── db.js             # MongoDB connection setup
 │   ├── controllers/
-│   │   ├── authController.js
-│   │   ├── busController.js
-│   │   ├── hotelController.js
-│   │   ├── packageController.js
-│   │   └── bookingController.js
+│   │   ├── authController.js      # User authentication
+│   │   ├── busController.js       # Bus operations
+│   │   ├── flightController.js    # Flight operations
+│   │   ├── hotelController.js     # Hotel operations
+│   │   ├── packageController.js   # Package operations
+│   │   └── bookingController.js   # Booking management
 │   ├── middleware/
-│   │   └── auth.js       # JWT authentication middleware
+│   │   └── auth.js           # JWT authentication middleware
 │   ├── models/
-│   │   ├── User.js
-│   │   ├── Bus.js
-│   │   ├── Hotel.js
-│   │   ├── Package.js
-│   │   └── Booking.js
+│   │   ├── User.js           # User schema
+│   │   ├── Bus.js            # Bus schema
+│   │   ├── Flight.js         # Flight schema
+│   │   ├── Hotel.js          # Hotel schema
+│   │   ├── Package.js        # Package schema
+│   │   └── Booking.js        # Booking schema
 │   ├── routes/
-│   │   ├── auth.js
-│   │   ├── bus.js
-│   │   ├── hotels.js
-│   │   ├── packages.js
-│   │   └── bookings.js
+│   │   ├── auth.js           # Authentication routes
+│   │   ├── bus.js            # Bus routes
+│   │   ├── flights.js        # Flight routes
+│   │   ├── hotels.js         # Hotel routes
+│   │   ├── packages.js       # Package routes
+│   │   └── bookings.js       # Booking routes
 │   ├── utils/
-│   │   └── seed.js       # Database seeding
-│   ├── server.js         # Express app entry point
-│   └── package.json
+│   │   └── seed.js           # Database seeding utility
+│   ├── server.js             # Express app entry point
+│   └── package.json          # Server dependencies
 │
-└── .env                  # Environment variables
+├── package.json              # Root package.json with convenience scripts
+└── .env                      # Environment variables (create this)
 ```
 
 ## 🔌 API Endpoints
@@ -141,97 +171,133 @@ voyago/
 ### Authentication
 
 - `POST /api/auth/register` - Register new user
+  - Body: `{ name, email, password }`
 - `POST /api/auth/login` - Login user
+  - Body: `{ email, password }`
+  - Returns: `{ token, user }`
 
 ### Buses
 
+- `GET /api/bus` - Get all buses
 - `GET /api/bus?from=<city>&to=<city>&date=<date>` - Search buses
 - `POST /api/bus/book` - Book bus ticket (Protected)
+  - Headers: `Authorization: Bearer <token>`
+  - Body: `{ busId, seats, date, passengerDetails }`
+
+### Flights
+
+- `GET /api/flights` - Get all flights
+- `GET /api/flights?from=<city>&to=<city>&date=<date>` - Search flights
+- `GET /api/flights/:id` - Get flight by ID
+- `POST /api/flights/book` - Book flight (Protected)
+  - Headers: `Authorization: Bearer <token>`
+  - Body: `{ flightId, seats, date, passengerDetails }`
 
 ### Hotels
 
-- `GET /api/hotels` - Get all hotels (with optional filters)
-- `GET /api/hotels/search?city=<city>` - Search hotels by city
+- `GET /api/hotels` - Get all hotels
+- `GET /api/hotels?city=<city>&checkIn=<date>&checkOut=<date>` - Search hotels
 - `GET /api/hotels/:id` - Get hotel by ID
 - `POST /api/hotels/book` - Book hotel room (Protected)
+  - Headers: `Authorization: Bearer <token>`
+  - Body: `{ hotelId, rooms, checkIn, checkOut, guestDetails }`
 
 ### Packages
 
 - `GET /api/packages` - Get all packages
 - `GET /api/packages/:id` - Get package by ID
 - `POST /api/packages/book` - Book package (Protected)
+  - Headers: `Authorization: Bearer <token>`
+  - Body: `{ packageId, travelers, startDate }`
 
 ### Bookings
 
 - `GET /api/bookings` - Get user's bookings (Protected)
+  - Headers: `Authorization: Bearer <token>`
+  - Returns all bookings for the authenticated user
 - `GET /api/bookings/:id` - Get booking by ID (Protected)
+  - Headers: `Authorization: Bearer <token>`
+- `DELETE /api/bookings/:id` - Cancel booking (Protected)
+  - Headers: `Authorization: Bearer <token>`
 
 ## 🛠️ Technologies Used
 
 ### Backend
 
-- **Express.js** - Web framework
-- **MongoDB** - Database
-- **Mongoose** - ODM for MongoDB
-- **JWT** - Authentication
-- **bcryptjs** - Password hashing
-- **dotenv** - Environment variables
-- **cors** - Cross-origin resource sharing
+- **Express.js** (v4.18.2) - Fast, unopinionated web framework
+- **MongoDB** - NoSQL database
+- **Mongoose** (v7.0.3) - Elegant MongoDB object modeling
+- **JWT** (jsonwebtoken v9.0.0) - Secure authentication tokens
+- **bcryptjs** (v2.4.3) - Password hashing
+- **dotenv** (v16.0.3) - Environment variable management
+- **cors** (v2.8.5) - Cross-origin resource sharing
+- **nodemon** (v2.0.22) - Development auto-reload
 
 ### Frontend
 
-- **Vanilla JavaScript** - No frameworks, pure JS
-- **Bootstrap 5** - UI framework
-- **AOS** - Scroll animations
-- **Google Fonts** - Poppins font
+- **Vanilla JavaScript** - No frameworks, pure ES6+ JavaScript
+- **Bootstrap 5** - Responsive UI framework
+- **AOS (Animate On Scroll)** - Scroll animations
+- **Google Fonts** - Poppins font family
+- **CSS3** - Modern styling with gradients, glassmorphism, and animations
 
 ## 🎨 Design Features
 
-- **Modern Color Palette** - Professional blue theme
-- **Smooth Animations** - AOS library for scroll animations
-- **Glassmorphism** - Modern card designs
-- **Responsive Layout** - Mobile-first approach
-- **Micro-interactions** - Hover effects and transitions
+- **Premium Color Palette** - Vibrant gradients and professional blue theme
+- **Smooth Animations** - AOS library for scroll animations and CSS transitions
+- **Glassmorphism** - Modern frosted glass card designs
+- **Responsive Layout** - Mobile-first approach with Bootstrap grid
+- **Micro-interactions** - Hover effects, button animations, and transitions
+- **Journey Timeline** - Visual representation of travel routes
+- **Rich Cards** - Detailed information cards with ratings, amenities, and pricing
+- **Dynamic Content** - Real-time updates and interactive elements
 
 ## 📝 Sample Data
 
-The application comes with pre-seeded data:
+The application comes with pre-seeded data (automatically loaded on first run):
 
-- **6 Buses** - Various routes across India
-- **6 Hotels** - Luxury and budget options
-- **6 Packages** - Popular destinations
+- **Buses** - Multiple routes across major Indian cities (Delhi, Mumbai, Bangalore, etc.)
+- **Flights** - Domestic flights with various airlines (Air India, IndiGo, SpiceJet, etc.)
+- **Hotels** - Luxury and budget options in popular destinations
+- **Packages** - Curated tour packages for popular tourist spots
 
 ## 🔐 Security Features
 
-- Password hashing with bcrypt
-- JWT token-based authentication
-- Protected routes with middleware
-- Input validation
-- CORS enabled
+- **Password Hashing** - bcrypt with salt rounds for secure password storage
+- **JWT Authentication** - Stateless token-based authentication
+- **Protected Routes** - Middleware to verify authentication on sensitive endpoints
+- **Input Validation** - Server-side validation for all user inputs
+- **CORS Configuration** - Controlled cross-origin access
+- **Environment Variables** - Sensitive data stored in .env file
 
-## 🚧 Future Enhancements
+## 📱 Pages Overview
 
-- [ ] Payment gateway integration
-- [ ] Email notifications
-- [ ] Advanced search filters
-- [ ] User reviews and ratings
-- [ ] Admin dashboard
-- [ ] Booking cancellation
-- [ ] Multi-language support
-- [ ] Dark mode
+### Public Pages
 
-## 📄 License
+- **Homepage** (`index.html`) - Hero section, popular destinations, featured packages
+- **Login** (`login.html`) - User authentication
+- **Register** (`register.html`) - New user registration
+- **Bus Booking** (`bus.html`) - Search and book bus tickets
+- **Flight Booking** (`flight.html`) - Search and book flights
+- **Hotel Booking** (`hotel.html`) - Search and book hotels
+- **Packages** (`package.html`) - Browse travel packages
+
+### Protected Pages
+
+- **Dashboard** (`dashboard.html`) - User profile and booking management
+
+## �📄 License
 
 ISC
 
 ## 👥 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please follow these steps:
 
-## 📧 Support
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-For support, email support@voyago.com or create an issue in the repository.
-
----
-
-**Made with ❤️ by the Voyago Team**
+**Made with ❤️ by Abhishek & Shital**

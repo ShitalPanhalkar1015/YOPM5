@@ -10,26 +10,33 @@ const Booking = require('../models/Booking');
 const searchBuses = async (req, res) => {
     const { from, to, date } = req.query;
 
-    if (!from || !to || !date) {
-        return res.status(400).json({ message: 'Please provide from, to, and date parameters.' });
-    }
-
     try {
-        // Create a date range for the entire day
-        const searchDate = new Date(date);
-        const nextDay = new Date(searchDate);
-        nextDay.setDate(searchDate.getDate() + 1);
+        let query = {};
 
-        const query = {
-            from: new RegExp(from, 'i'), // Case-insensitive search
-            to: new RegExp(to, 'i'),
-            date: {
-                $gte: searchDate,
-                $lt: nextDay,
-            },
-        };
+        // If search parameters are provided, filter by them
+        if (from && to && date) {
+            // Create a date range for the entire day
+            const searchDate = new Date(date);
+            const nextDay = new Date(searchDate);
+            nextDay.setDate(searchDate.getDate() + 1);
 
-        const buses = await Bus.find(query);
+            query = {
+                from: new RegExp(from, 'i'), // Case-insensitive search
+                to: new RegExp(to, 'i'),
+                date: {
+                    $gte: searchDate,
+                    $lt: nextDay,
+                },
+            };
+        } else {
+            // If no parameters, return all upcoming buses (optional: limit to 20)
+            // For now, just return all to populate the page
+            query = {
+                date: { $gte: new Date() } // Only future buses
+            };
+        }
+
+        const buses = await Bus.find(query).sort({ date: 1 }); // Sort by date
 
         if (buses.length === 0) {
             return res.json([]); // Return empty array if no buses found

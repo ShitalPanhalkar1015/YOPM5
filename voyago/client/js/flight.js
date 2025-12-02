@@ -7,7 +7,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     // Load all flights initially
     loadAllFlights();
+
+    // Payment button handler
+    const confirmPaymentBtn = document.getElementById('confirm-payment-btn');
+    if (confirmPaymentBtn) {
+        confirmPaymentBtn.addEventListener('click', handlePaymentSubmission);
+    }
 });
+
+let pendingBooking = null;
 
 async function loadAllFlights() {
     const resultsContainer = document.getElementById('flight-results');
@@ -118,7 +126,7 @@ function renderFlightResults(flights) {
         </div>
     `).join('');
 
-    resultsContainer.innerHTML = `<h3 class="mb-4 text-primary-800">Available Flights</h3><div class="row">${flightCards}</div>`;
+    resultsContainer.innerHTML = `<div class="row">${flightCards}</div>`;
 }
 
 /**
@@ -134,16 +142,7 @@ async function initiateFlightBooking(flightId) {
         return;
     }
 
-    bookFlight(flightId, seats);
-}
-
-/**
- * Handles the booking of a flight.
- * @param {string} flightId - The ID of the flight to book.
- * @param {number} seats - The number of seats to book.
- */
-async function bookFlight(flightId, seats) {
-    // Check if user is logged in before allowing booking
+    // Check if user is logged in before showing payment modal
     if (!localStorage.getItem('token')) {
         showAlert('You must be logged in to book a ticket.', 'warning');
         setTimeout(() => {
@@ -152,9 +151,72 @@ async function bookFlight(flightId, seats) {
         return;
     }
 
+    // Store booking details
+    pendingBooking = { flightId, seats };
+
+    // Show payment modal
+    const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+    paymentModal.show();
+}
+
+/**
+ * Handles the payment submission.
+ */
+async function handlePaymentSubmission() {
+    if (!pendingBooking) return;
+
+    const payBtn = document.getElementById('confirm-payment-btn');
+    const originalText = payBtn.innerHTML;
+    
+    // Basic validation
+    const cardHolder = document.getElementById('card-holder').value;
+    const cardNumber = document.getElementById('card-number').value;
+    const expiry = document.getElementById('expiry-date').value;
+    const cvv = document.getElementById('cvv').value;
+
+    if (!cardHolder || !cardNumber || !expiry || !cvv) {
+        alert('Please fill in all payment details.');
+        return;
+    }
+
+    payBtn.disabled = true;
+    payBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
+
+    // Simulate payment delay
+    setTimeout(async () => {
+        // Hide modal
+        const paymentModalEl = document.getElementById('paymentModal');
+        const paymentModal = bootstrap.Modal.getInstance(paymentModalEl);
+        paymentModal.hide();
+
+        // Reset button
+        payBtn.disabled = false;
+        payBtn.innerHTML = originalText;
+
+        // Proceed with booking
+        await bookFlight(pendingBooking.flightId, pendingBooking.seats);
+        
+        // Clear pending booking
+        pendingBooking = null;
+        
+        // Reset form
+        document.getElementById('payment-form').reset();
+    }, 2000);
+}
+
+/**
+ * Handles the booking of a flight.
+ * @param {string} flightId - The ID of the flight to book.
+ * @param {number} seats - The number of seats to book.
+ */
+async function bookFlight(flightId, seats) {
+    // User login check is already done in initiateFlightBooking
+    
     const bookButton = document.getElementById(`book-btn-${flightId}`);
-    bookButton.disabled = true;
-    bookButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Booking...';
+    if(bookButton) {
+         bookButton.disabled = true;
+         bookButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Booking...';
+    }
     
     try {
         const result = await api('/flights/book', 'POST', { flightId, seats });
