@@ -1,53 +1,94 @@
-// Handles login and register pages
-const API_BASE = '/api';
+// js/auth.js
 
-async function postJson(url, body) {
-  try {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-    const data = await res.json();
-    return { ok: res.ok, status: res.status, data };
-  } catch (err) {
-    return { ok: false, status: 0, data: { message: err.message } };
-  }
-}
+/**
+ * This script handles authentication-related functionality.
+ * - It attaches event listeners to the login and register forms.
+ * - It uses the global `api` function to send requests to the backend.
+ * - On successful login, it stores the JWT and user object in localStorage.
+ */
 
 document.addEventListener('DOMContentLoaded', () => {
-  const loginForm = document.getElementById('loginForm');
-  if (loginForm) {
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-      const res = await postJson(`${API_BASE}/auth/login`, { email, password });
-      if (res.ok && res.data.token) {
-        setLoggedIn(res.data.user || { email }, res.data.token);
-        showAlert('Login successful', 'success', 2000);
-        window.location = '/dashboard.html';
-      } else {
-        showAlert(res.data.message || 'Login failed', 'danger');
-      }
-    });
-  }
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
 
-  const registerForm = document.getElementById('registerForm');
-  if (registerForm) {
-    registerForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-      const res = await postJson(`${API_BASE}/auth/register`, { name, email, password });
-      if (res.ok && res.data.token) {
-        setLoggedIn(res.data.user || { name, email }, res.data.token);
-        showAlert('Registration successful', 'success', 2000);
-        window.location = '/dashboard.html';
-      } else {
-        showAlert(res.data.message || 'Registration failed', 'danger');
-      }
-    });
-  }
+    if (loginForm) {
+        loginForm.addEventListener('submit', handleLogin);
+    }
+
+    if (registerForm) {
+        registerForm.addEventListener('submit', handleRegister);
+    }
 });
+
+/**
+ * Handles the login form submission.
+ * @param {Event} e - The form submission event.
+ */
+async function handleLogin(e) {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const loginButton = e.target.querySelector('button[type="submit"]');
+
+    // Disable button and show spinner
+    loginButton.disabled = true;
+    loginButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Logging In...';
+
+    try {
+        const data = await api('/auth/login', 'POST', { email, password });
+
+        // Backend returns { userId, name, email, token }
+        // We will store the token and the user object separately
+        localStorage.setItem('token', data.token);
+        const user = { _id: data.userId, name: data.name, email: data.email };
+        localStorage.setItem('user', JSON.stringify(user));
+
+        showAlert('Login successful! Redirecting to your dashboard...', 'success');
+        
+        // Redirect to dashboard after a short delay
+        setTimeout(() => {
+            window.location.href = 'dashboard.html';
+        }, 1500);
+
+    } catch (error) {
+        console.error('Login error:', error);
+        showAlert(error.message, 'danger');
+        // Re-enable button on failure
+        loginButton.disabled = false;
+        loginButton.innerHTML = 'Login';
+    }
+}
+
+/**
+ * Handles the registration form submission.
+ * @param {Event} e - The form submission event.
+ */
+async function handleRegister(e) {
+    e.preventDefault();
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const registerButton = e.target.querySelector('button[type="submit"]');
+
+    // Disable button and show spinner
+    registerButton.disabled = true;
+    registerButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Registering...';
+
+    try {
+        await api('/auth/register', 'POST', { name, email, password });
+
+        showAlert('Registration successful! Please log in.', 'success');
+        
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 2000);
+
+    } catch (error) {
+        console.error('Registration error:', error);
+        showAlert(error.message, 'danger');
+        // Re-enable button on failure
+        registerButton.disabled = false;
+        registerButton.innerHTML = 'Register';
+    }
+}
+

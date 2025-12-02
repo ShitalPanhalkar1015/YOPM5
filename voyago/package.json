@@ -1,23 +1,21 @@
 {
   "name": "voyago",
   "version": "1.0.0",
-  "description": "Voyago travel booking app",
+  "description": "Modern travel booking platform with Express.js backend and vanilla JS frontend",
   "main": "server/server.js",
   "scripts": {
-    "start": "node server/server.js",
-    "dev": "nodemon server/server.js",
-    "seed": "node server/seed.js"
+    "server": "cd voyago/server && npm run dev",
+    "install-server": "cd voyago/server && npm install",
+    "dev": "cd voyago/server && npm run dev",
+    "start": "cd voyago/server && npm start"
   },
-  "dependencies": {
-    "bcrypt": "^5.1.1",
-    "body-parser": "^1.20.2",
-    "cors": "^2.8.5",
-    "dotenv": "^16.6.1",
-    "express": "^4.21.2",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^7.8.7"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.10"
-  }
+  "keywords": [
+    "travel",
+    "booking",
+    "express",
+    "mongodb",
+    "voyago"
+  ],
+  "author": "Voyago Team",
+  "license": "ISC"
 }
